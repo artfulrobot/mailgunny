@@ -58,8 +58,7 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
    * @return string
    */
   public function getApiKey() {
-    // @todo fetch from somewhere.
-    $v = Civi::settings()->get('mailgun_api_key');
+    return Civi::settings()->get('mailgun_api_key');
   }
 
   /**
@@ -74,6 +73,7 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
       elseif ($event->severity === 'temporary') {
         $this->processTemporaryBounce($event);
       }
+      echo '{"success": 1}';
       break;
 
     case 'accepted':
@@ -90,8 +90,6 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
     default:
       throw new CRM_Mailgunny_WebhookRejectedException("Unrecognised webhook event type is not handled by this webhook.");
     }
-
-
   }
 
   public function processPermanentBounce($event) {
@@ -103,7 +101,10 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
   public function processCommonBounce($event, $type) {
     Civi::log()->info("Mailgun Webhook processing bounce: $type");
     // Ideally we would have access to 'X-CiviMail-Bounce' but I don't think we do.
-    $bounce_params = $this->extractVerpData($event->envelope->sender ?? '');
+    $bounce_params = $this->extractVerpData($event);
+    if (!$bounce_params) {
+      throw new CRM_Mailgunny_WebhookRejectedException("Cannot find VERP data necessary to process bounce.");
+    }
     $bounce_params['bounce_type_id'] = $this->getCiviBounceTypeId($type);
     $bounce_params['bounce_reason'] = ($event->{'delivery-status'}->description ?? '')
       . " "
@@ -112,18 +113,31 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
     $bounced = CRM_Mailing_Event_BAO_Bounce::create($bounce_params);
   }
   /**
-   * Extract data from verp email address string.
-   *
-   * Credit goes to https://github.com/mecachisenros
+   * Extract data from verp data if we can.
    *
    * @param string $data e.g. 'b.22.23.1bc42342342@example.com'
    * @return array with keys: job_id, event_queue_id, hash
    */
-  public function extractVerpData($data) {
+  public function extractVerpData($event) {
+
+    if (!empty($event->{'user-variables'}->{'civimail-bounce'})) {
+      // Great, we found the header we added in our hook_civicrm_alterMailParams.
+      $data = $event->{'user-variables'}->{'civimail-bounce'};
+    }
+    elseif (!empty($event->envelope->sender)) {
+      // Hmmm. See if the envelope sender has anything useful in it.
+      $data = $event->envelope->sender;
+    }
+
+    // Credit goes to https://github.com/mecachisenros for the verp parsing:
     $verp_separator = Civi::settings()->get('verpSeparator');
 		$localpart = CRM_Core_BAO_MailSettings::defaultLocalpart();
-    $verp_items = array_combine(['job_id', 'event_queue_id', 'hash'],
-      explode($verp_separator, substr(substr($data, 0, strpos($data, '@')), strlen($localpart) + 2)));
+    $parts = explode($verp_separator, substr(substr($data, 0, strpos($data, '@')), strlen($localpart) + 2));
+
+    $verp_items = (count($parts) === 3)
+      ? array_combine(['job_id', 'event_queue_id', 'hash'], $parts)
+      : [];
+
     return $verp_items;
   }
 

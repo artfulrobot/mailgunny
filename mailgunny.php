@@ -134,30 +134,31 @@ function mailgunny_civicrm_entityTypes(&$entityTypes) {
   _mailgunny_civix_civicrm_entityTypes($entityTypes);
 }
 
-// --- Functions below this ship commented out. Uncomment as required. ---
-
 /**
- * Implements hook_civicrm_preProcess().
+ * Try to embed VERP data in a way that Mailgun will provide to webhooks.
  *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function mailgunny_civicrm_preProcess($formName, &$form) {
-
-} // */
-
-/**
- * Implements hook_civicrm_navigationMenu().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
-function mailgunny_civicrm_navigationMenu(&$menu) {
-  _mailgunny_civix_insert_navigation_menu($menu, 'Mailings', array(
-    'label' => E::ts('New subliminal message'),
-    'name' => 'mailing_subliminal_message',
-    'url' => 'civicrm/mailing/subliminal',
-    'permission' => 'access CiviMail',
-    'operator' => 'OR',
-    'separator' => 0,
-  ));
-  _mailgunny_civix_navigationMenu($menu);
-} // */
+ * Implements hook_civicrm_alterMailParams(&$params, $context)
+ */
+function mailgunny_civicrm_alterMailParams(&$params, $context) {
+  if (isset($params['X-CiviMail-Bounce'])) {
+    // Copy this header to one that will be returned by Mailgun's webhook.
+    $params['X-Mailgun-Variables'] = json_encode(['civimail-bounce' => $params['X-CiviMail-Bounce']]);
+  }
+  elseif (isset($params['Return-Path'])) {
+    // Copy this header to one that will be returned by Mailgun's webhook.
+    $params['X-Mailgun-Variables'] = json_encode(['civimail-bounce' => $params['Return-Path']]);
+  }
+  /*
+ ⬦ $context = (string [10]) `flexmailer`
+   ⬦ $params['X-CiviMail-Mosaico'] = (string [3]) `Yes`
+   ⬦ $params['List-Unsubscribe'] = (string [52]) `<mailto:u.72.32.fa5f74c72c53c77f@crm.artfulrobot.uk>`
+   ⬦ $params['Precedence'] = (string [4]) `bulk`
+   ⬦ $params['job_id'] = (string [2]) `72`
+   ⬦ $params['From'] = (string [37]) `"Artful Robot" <hello@artfulrobot.uk>`
+   ⬦ $params['toEmail'] = (string [20]) `hello@artfulrobot.uk`
+   ⬦ $params['toName'] = (string [12]) `Artful Robot`
+   ⬦ $params['Return-Path'] = (string [43]) `b.72.32.fa5f74c72c53c77f@crm.artfulrobot.uk`
+   ⬦ $params['X-CiviMail-Bounce'] = (string [43]) `b.72.32.fa5f74c72c53c77f@crm.artfulrobot.uk`
+   ⬦ $params['attachments'] = (array)
+   */
+}
