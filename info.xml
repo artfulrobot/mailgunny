@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<extension key="mailgunny" type="module">
+  <file>mailgunny</file>
+  <name>Mailgunny - Mailgun webhook bounce processor</name>
+  <description>Provides a webhook for responding to the webhook Mailgun can send for bounced emails.</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Rich Lott / Artful Robot</author>
+    <email>forums@artfulrobot.uk</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">https://github.com/artfulrobot/mailgunny</url>
+    <url desc="Documentation">https://github.com/artfulrobot/mailgunny</url>
+    <url desc="Support">https://github.com/artfulrobot/mailgunny</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2018-12-11</releaseDate>
+  <version>1.0</version>
+  <develStage>alpha</develStage>
+  <compatibility>
+    <ver>5.0</ver>
+  </compatibility>
+  <comments>This is a very simple extension and is not well tested yet.</comments>
+  <civix>
+    <namespace>CRM/Mailgunny</namespace>
+  </civix>
+</extension>
