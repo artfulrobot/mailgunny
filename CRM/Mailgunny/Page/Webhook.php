@@ -53,11 +53,14 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
   }
 
   /**
-   * Get API key from Mailgun account.
+   * Get API key for Mailgun account.
    *
    * @return string
    */
   public function getApiKey() {
+    if (defined('MAILGUN_API_KEY')) {
+      return MAILGUN_API_KEY;
+    }
     return Civi::settings()->get('mailgun_api_key');
   }
 
@@ -103,7 +106,10 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
     // Ideally we would have access to 'X-CiviMail-Bounce' but I don't think we do.
     $bounce_params = $this->extractVerpData($event);
     if (!$bounce_params) {
-      throw new CRM_Mailgunny_WebhookRejectedException("Cannot find VERP data necessary to process bounce.");
+      // @todo Find the email and put it on hold.
+      Civi::log()->info("Mailgun Webhook: $event #noverp @todo find email and put on hold.");
+      return;
+      //throw new CRM_Mailgunny_WebhookRejectedException("Cannot find VERP data necessary to process bounce.");
     }
     $bounce_params['bounce_type_id'] = $this->getCiviBounceTypeId($type);
     $bounce_params['bounce_reason'] = ($event->{'delivery-status'}->description ?? '')
@@ -141,7 +147,7 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
     return $verp_items;
   }
 
-  /**
+  /*
    * Get CiviCRM bounce type.
    *
    * @param string Name of bounce type, e.g. Invalid|Syntax|Spam|Relay|Quota|Loop|Inactive|Host|Dns|Away|AOL

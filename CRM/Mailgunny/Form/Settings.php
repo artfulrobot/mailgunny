@@ -9,7 +9,8 @@ use CRM_Mailgunny_ExtensionUtil as E;
  */
 class CRM_Mailgunny_Form_Settings extends CRM_Admin_Form_Setting {
   protected $_settings = [
-    'mailgun_api_key' =>  CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME,
+    'mailgun_api_key' =>  'domain',
+    //'mailgun_api_key' =>  CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME,
   ];
   public function buildQuickForm() {
     parent::buildQuickForm();

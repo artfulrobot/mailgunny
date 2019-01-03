@@ -6,7 +6,7 @@ return [
     'title'       => ts('Mailgun API key'),
     'description' => ts('The Mailgun API key for the sending domain'),
     'type'        => 'String',
-    'add'         => '5.8',
+    'add'         => '5.0',
     'html_type'   => 'text',
     'default'     => '',
     'is_domain'   => 1,

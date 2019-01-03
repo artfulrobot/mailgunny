@@ -148,6 +148,9 @@ function mailgunny_civicrm_alterMailParams(&$params, $context) {
     // Copy this header to one that will be returned by Mailgun's webhook.
     $params['X-Mailgun-Variables'] = json_encode(['civimail-bounce' => $params['Return-Path']]);
   }
+  else {
+    // Probably a single email, for which we don't have any useful information to add.
+  }
   /*
  ⬦ $context = (string [10]) `flexmailer`
    ⬦ $params['X-CiviMail-Mosaico'] = (string [3]) `Yes`
