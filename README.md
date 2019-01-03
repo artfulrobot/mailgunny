@@ -59,13 +59,19 @@ Nb. the API key is *not* your Mailgun password (nor your domain's SMTP
 password). You can find it on the page for your domain on the Mailgun admin
 interface.
 
-Once you've got it, visit the settings page at:
+**CiviCRM 5.8+ users can** visit the settings page at:
 
 - Drupal 7: `https://example.com/civicrm/mailgunny/settings`
 - Wordpress: `https://example.com/?page=CiviCRM&q=civicrm/mailgunny/settings`
 - Joomla: `https://example.com/index.php?option=com_civicrm&task=civicrm/mailgunny/settings`
 
 Put it in the box and press Save.
+
+**CiviCRM 5.0 - 5.7 users** must instead define a constant in their `civicrm.settings.php` file like this:
+
+```php
+define('MAILGUN_API_KEY', 'xxxxxxxxxxxxxxxxx');
+```
 
 Right, you're all set.
 
