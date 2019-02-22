@@ -99,7 +99,8 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
     $this->processCommonBounce($event, 'Invalid');
   }
   public function processTemporaryBounce($event) {
-    $this->processCommonBounce($event, 'Syntax');
+    //$this->processCommonBounce($event, 'Syntax');
+    Civi::log()->info("Mailgun Webhook skipping temporary bounce.");
   }
   public function processCommonBounce($event, $type) {
     Civi::log()->info("Mailgun Webhook processing bounce: $type");
