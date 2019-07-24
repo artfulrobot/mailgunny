@@ -152,16 +152,16 @@ function mailgunny_civicrm_alterMailParams(&$params, $context) {
     // Probably a single email, for which we don't have any useful information to add.
   }
   /*
- ⬦ $context = (string [10]) `flexmailer`
-   ⬦ $params['X-CiviMail-Mosaico'] = (string [3]) `Yes`
-   ⬦ $params['List-Unsubscribe'] = (string [52]) `<mailto:u.72.32.fa5f74c72c53c77f@crm.artfulrobot.uk>`
-   ⬦ $params['Precedence'] = (string [4]) `bulk`
-   ⬦ $params['job_id'] = (string [2]) `72`
-   ⬦ $params['From'] = (string [37]) `"Artful Robot" <hello@artfulrobot.uk>`
-   ⬦ $params['toEmail'] = (string [20]) `hello@artfulrobot.uk`
-   ⬦ $params['toName'] = (string [12]) `Artful Robot`
-   ⬦ $params['Return-Path'] = (string [43]) `b.72.32.fa5f74c72c53c77f@crm.artfulrobot.uk`
-   ⬦ $params['X-CiviMail-Bounce'] = (string [43]) `b.72.32.fa5f74c72c53c77f@crm.artfulrobot.uk`
-   ⬦ $params['attachments'] = (array)
-   */
+   * $context = (string [10]) `flexmailer`
+   * $params['X-CiviMail-Mosaico'] = (string [3]) `Yes`
+   * $params['List-Unsubscribe'] = (string [52]) `<mailto:u.72.32.fa5f74c72c53c77f@crm.example.com>`
+   * $params['Precedence'] = (string [4]) `bulk`
+   * $params['job_id'] = (string [2]) `72`
+   * $params['From'] = (string [37]) `"Wilma Flintstone" <wilma@example.com>`
+   * $params['toEmail'] = (string [20]) `barney@example.com`
+   * $params['toName'] = (string [12]) `Barney Rubble`
+   * $params['Return-Path'] = (string [43]) `b.72.32.fa5f74c72c53c77f@crm.example.com`
+   * $params['X-CiviMail-Bounce'] = (string [43]) `b.72.32.fa5f74c72c53c77f@crm.example.com`
+   * $params['attachments'] = (array)
+ */
 }
