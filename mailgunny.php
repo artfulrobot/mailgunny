@@ -142,11 +142,11 @@ function mailgunny_civicrm_entityTypes(&$entityTypes) {
 function mailgunny_civicrm_alterMailParams(&$params, $context) {
   if (isset($params['X-CiviMail-Bounce'])) {
     // Copy this header to one that will be returned by Mailgun's webhook.
-    $params['X-Mailgun-Variables'] = json_encode(['civimail-bounce' => $params['X-CiviMail-Bounce']]);
+    $params['headers']['X-Mailgun-Variables'] = json_encode(['civimail-bounce' => $params['X-CiviMail-Bounce']]);
   }
   elseif (isset($params['Return-Path'])) {
     // Copy this header to one that will be returned by Mailgun's webhook.
-    $params['X-Mailgun-Variables'] = json_encode(['civimail-bounce' => $params['Return-Path']]);
+    $params['headers']['X-Mailgun-Variables'] = json_encode(['civimail-bounce' => $params['Return-Path']]);
   }
   else {
     // Probably a single email, for which we don't have any useful information to add.
