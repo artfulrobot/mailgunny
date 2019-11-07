@@ -44,7 +44,7 @@ cv en mailgunny
 
 ### Step 1: configure your webhooks at Mailgun
 
-Log in to mailgun's website and find the Webhooks page.
+Log in to mailgun's website and find the Webhooks page (*not* the "legacy webhooks").
 
 For **Permanent Failure** and **Temporary Failure** events, enter the webhook
 URL for your site, which will look like:
@@ -53,11 +53,10 @@ URL for your site, which will look like:
 - Wordpress: `https://example.com/?page=CiviCRM&q=civicrm/mailgunny/webhook`
 - Joomla: `https://example.com/index.php?option=com_civicrm&task=civicrm/mailgunny/webhook`
 
-### Step 2: enter your Mailgun API key
+### Step 2: enter your Mailgun "HTTP webhook signing key" in your CiviCRM Mailgunny settings page
 
-Nb. the API key is *not* your Mailgun password (nor your domain's SMTP
-password). You can find it on the page for your domain on the Mailgun admin
-interface.
+Nb. the "HTTP webhook signing key" key is *not* your Mailgun password (nor your domain's SMTP
+password). You can find it on the Webhooks page.
 
 **CiviCRM 5.8+ users can** visit the settings page at:
 
