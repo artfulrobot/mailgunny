@@ -61,7 +61,7 @@ password). You can find it on the Webhooks page.
 **CiviCRM 5.8+ users can** visit the settings page at:
 
 - Drupal 7: `https://example.com/civicrm/mailgunny/settings`
-- Wordpress: `https://example.com/?page=CiviCRM&q=civicrm/mailgunny/settings`
+- Wordpress: `https://example.com/wp-admin/admin.php?page=CiviCRM&q=civicrm/mailgunny/settings`
 - Joomla: `https://example.com/index.php?option=com_civicrm&task=civicrm/mailgunny/settings`
 
 Put it in the box and press Save.
