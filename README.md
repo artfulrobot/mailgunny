@@ -49,7 +49,7 @@ Log in to mailgun's website and find the Webhooks page (*not* the "legacy webhoo
 For **Permanent Failure** and **Temporary Failure** events, enter the webhook
 URL for your site, which will look like:
 
-- Drupal 7: `https://example.com/civicrm/mailgunny/webhook`
+- Drupal 7 and Backdrop: `https://example.com/civicrm/mailgunny/webhook`
 - Wordpress: `https://example.com/?page=CiviCRM&q=civicrm/mailgunny/webhook`
 - Joomla: `https://example.com/index.php?option=com_civicrm&task=civicrm/mailgunny/webhook`
 
@@ -60,7 +60,7 @@ password). You can find it on the Webhooks page.
 
 **CiviCRM 5.8+ users can** visit the settings page at:
 
-- Drupal 7: `https://example.com/civicrm/mailgunny/settings`
+- Drupal 7 and Backdrop: `https://example.com/civicrm/mailgunny/settings`
 - Wordpress: `https://example.com/wp-admin/admin.php?page=CiviCRM&q=civicrm/mailgunny/settings`
 - Joomla: `https://example.com/index.php?option=com_civicrm&task=civicrm/mailgunny/settings`
 
