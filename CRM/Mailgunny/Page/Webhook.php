@@ -106,18 +106,21 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
     Civi::log()->info("Mailgun Webhook processing bounce: $type");
     // Ideally we would have access to 'X-CiviMail-Bounce' but I don't think we do.
     $bounce_params = $this->extractVerpData($event);
-    if (!$bounce_params) {
-      // @todo Find the email and put it on hold.
-      Civi::log()->info("Mailgun Webhook: $event #noverp @todo find email and put on hold.");
-      return;
-      //throw new CRM_Mailgunny_WebhookRejectedException("Cannot find VERP data necessary to process bounce.");
-    }
+    $foundVerpData = (bool) $bounce_params;
+
     $bounce_params['bounce_type_id'] = $this->getCiviBounceTypeId($type);
     $bounce_params['bounce_reason'] = ($event->{'delivery-status'}->description ?? '')
       . " "
       . ($event->{'delivery-status'}->message ?? '')
       . " Mailgun Event Id: " . ($event->id ?? '');
-    $bounced = CRM_Mailing_Event_BAO_Bounce::create($bounce_params);
+
+    if ($foundVerpData) {
+      CRM_Mailing_Event_BAO_Bounce::create($bounce_params);
+    }
+    else {
+      // We cannot record a bounce because that requires a CiviMail mailing.
+      Civi::log()->info("Mailgun Webhook: Event ID {$event->id} #noverp You might want to consider putting {$event->recipient} on hold.");
+    }
   }
   /**
    * Extract data from verp data if we can.
