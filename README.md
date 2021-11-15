@@ -44,7 +44,9 @@ cv en mailgunny
 
 ### Step 1: configure your webhooks at Mailgun
 
-Log in to mailgun's website and find the Webhooks page (*not* the "legacy webhooks").
+Log in to Mailgun's website and find the Webhooks page (*not* the "legacy
+webhooks"). As of Nov 2021, this is under **Sending » Webhooks** in the side
+panel.
 
 For **Permanent Failure** and **Temporary Failure** events, enter the webhook
 URL for your site, which will look like:
