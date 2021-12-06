@@ -138,8 +138,20 @@ function mailgunny_civicrm_entityTypes(&$entityTypes) {
  * Try to embed VERP data in a way that Mailgun will provide to webhooks.
  *
  * Implements hook_civicrm_alterMailParams(&$params, $context)
+ *
+ * Note that this hook is NOT called when sending mail to test the SMTP credentials.
  */
 function mailgunny_civicrm_alterMailParams(&$params, $context) {
+
+  if (!isset(Civi::$statics[__FUNCTION__])) {
+    Civi::$statics[__FUNCTION__] = Civi::settings()->get('mailgun_native_send');
+    // Civi::log()->info("mailgun_native_send: ". json_encode(Civi::$statics[__FUNCTION__]));
+  }
+  if (!empty(Civi::$statics[__FUNCTION__])) {
+    // Civi::log()->info("Added x-mailgun-native-send");
+    $params['headers']['x-mailgun-native-send'] = 'true';
+  }
+
   if (isset($params['X-CiviMail-Bounce'])) {
     // Copy this header to one that will be returned by Mailgun's webhook.
     $params['headers']['X-Mailgun-Variables'] = json_encode(['civimail-bounce' => $params['X-CiviMail-Bounce']]);
@@ -165,3 +177,21 @@ function mailgunny_civicrm_alterMailParams(&$params, $context) {
    * $params['attachments'] = (array)
  */
 }
+/**
+ * Implements hook_civicrm_navigationMenu().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu
+ */
+function mailgunny_civicrm_navigationMenu(&$menu) {
+  _mailgunny_civix_insert_navigation_menu($menu, 'Administer/CiviMail', [
+    'label' => E::ts('Mailgunny settings'),
+    'name' => 'mailgunny_settings',
+    'url' => 'civicrm/mailgunny/settings',
+    'permission' => 'administer CiviCRM system',
+    //'permission' => 'access CiviCRM',
+    'operator' => 'OR',
+    'separator' => 0,
+  ]);
+  _mailgunny_civix_navigationMenu($menu);
+}
+

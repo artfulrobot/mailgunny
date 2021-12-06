@@ -1,9 +1,20 @@
 
-<div class="crm-section">
-  <p>To find this login to Mailgun, go to the webhooks page for your domain and it should be in the top right corner under "HTTP webhook signing key"</p>
-  <div class="label">{$form.mailgun_api_key.label}</div>
-  <div class="content">{$form.mailgun_api_key.html}</div>
-  <div class="clear"></div>
+<div class="row">
+  <div class="crm-section">
+    <div class="label">{$form.mailgun_api_key.label}</div>
+    <div class="content">{$form.mailgun_api_key.html}</div>
+    <div class="clear"></div>
+  </div>
+  <p>To find the webhook signing key, login to Mailgun, go to the webhooks page for your domain and it should be in the top right corner under "HTTP webhook signing key"</p>
+</div>
+
+<div class="row">
+  <div class="crm-section">
+    <div class="label">{$form.mailgun_native_send.label}</div>
+    <div class="content">{$form.mailgun_native_send.html}</div>
+    <div class="clear"></div>
+  </div>
+  <p>Checking this box applies an <code>x-mailgun-native-send: true</code> header. If you want to use the DKIM authority from your main domain, and the SPF and Return Path of a sub domain, you'll need this. If you check this box without understanding why, bad things might happen (untested).</p>
 </div>
 
 {* FOOTER *}
@@ -13,7 +24,7 @@
 
 <h2>Your webhook URL</h2>
 
-<p>You need to copy and paste this to set up your webhooks on Mailgun's website. You should set up webhooks for:</p>
+<p>You need to copy and paste the link below to set up your webhooks on Mailgun's website. You should set up webhooks for:</p>
 <ul>
   <li>Permanent Fail</li>
   <li>Temporary Fail</li>

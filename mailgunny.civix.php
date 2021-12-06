@@ -374,6 +374,7 @@ function _mailgunny_civix_insert_navigation_menu(&$menu, $path, $item) {
     $found = FALSE;
     $path = explode('/', $path);
     $first = array_shift($path);
+    $foundMenuNames = [];
     foreach ($menu as $key => &$entry) {
       if ($entry['attributes']['name'] == $first) {
         if (!isset($entry['child'])) {
@@ -381,6 +382,12 @@ function _mailgunny_civix_insert_navigation_menu(&$menu, $path, $item) {
         }
         $found = _mailgunny_civix_insert_navigation_menu($entry['child'], implode('/', $path), $item);
       }
+      else {
+        $foundMenuNames[] = $entry['attributes']['name'];
+      }
+    }
+    if (!$found) {
+      Civi::log()->warning(__FUNCTION__ . " failed to find '$first' in menu. Valid options are: " . implode(', ', $foundMenuNames));
     }
     return $found;
   }
