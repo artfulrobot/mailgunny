@@ -2,6 +2,7 @@
 use CRM_Mailgunny_ExtensionUtil as E;
 
 class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
+
   public function run() {
     try {
       $event = $this->validateInput(file_get_contents('php://input'));
@@ -17,8 +18,9 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
       Civi::log()->notice("Mailgun Webhook fatal (returning 500)", ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
       header("$_SERVER[SERVER_PROTOCOL] 500");
     }
-     CRM_Utils_System::civiExit();
+    CRM_Utils_System::civiExit();
   }
+
   /**
    * Check input and return the event data if all ok.
    *
@@ -69,39 +71,41 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
    */
   public function processEvent($event) {
     switch ($event->event){
-    case 'failed':
-      if ($event->severity === 'permanent') {
-        $this->processPermanentBounce($event);
-      }
-      elseif ($event->severity === 'temporary') {
-        $this->processTemporaryBounce($event);
-      }
-      echo '{"success": 1}';
-      break;
+      case 'failed':
+        if ($event->severity === 'permanent') {
+          $this->processPermanentBounce($event);
+        }
+        elseif ($event->severity === 'temporary') {
+          $this->processTemporaryBounce($event);
+        }
+        echo '{"success": 1}';
+        break;
 
-    case 'accepted':
-    case 'rejected':
-    case 'delivered':
-    case 'opened':
-    case 'closed':
-    case 'clicked':
-    case 'unsubscribed':
-    case 'complained':
-    case 'stored':
-      throw new CRM_Mailgunny_WebhookRejectedException("$event->event is not handled by this webhook.");
+      case 'accepted':
+      case 'rejected':
+      case 'delivered':
+      case 'opened':
+      case 'closed':
+      case 'clicked':
+      case 'unsubscribed':
+      case 'complained':
+      case 'stored':
+        throw new CRM_Mailgunny_WebhookRejectedException("$event->event is not handled by this webhook.");
 
-    default:
-      throw new CRM_Mailgunny_WebhookRejectedException("Unrecognised webhook event type is not handled by this webhook.");
+      default:
+        throw new CRM_Mailgunny_WebhookRejectedException("Unrecognised webhook event type is not handled by this webhook.");
     }
   }
 
   public function processPermanentBounce($event) {
     $this->processCommonBounce($event, 'Invalid');
   }
+
   public function processTemporaryBounce($event) {
     //$this->processCommonBounce($event, 'Syntax');
     Civi::log()->info("Mailgun Webhook skipping temporary bounce.");
   }
+
   public function processCommonBounce($event, $type) {
     Civi::log()->info("Mailgun Webhook processing bounce: $type");
     // Ideally we would have access to 'X-CiviMail-Bounce' but I don't think we do.
@@ -122,6 +126,7 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
       Civi::log()->info("Mailgun Webhook: Event ID {$event->id} #noverp You might want to consider putting {$event->recipient} on hold.");
     }
   }
+
   /**
    * Extract data from verp data if we can.
    *
@@ -129,7 +134,6 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
    * @return array with keys: job_id, event_queue_id, hash
    */
   public function extractVerpData($event) {
-
     if (!empty($event->{'user-variables'}->{'civimail-bounce'})) {
       // Great, we found the header we added in our hook_civicrm_alterMailParams.
       $data = $event->{'user-variables'}->{'civimail-bounce'};
@@ -141,7 +145,7 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
 
     // Credit goes to https://github.com/mecachisenros for the verp parsing:
     $verp_separator = Civi::settings()->get('verpSeparator');
-		$localpart = CRM_Core_BAO_MailSettings::defaultLocalpart();
+    $localpart = CRM_Core_BAO_MailSettings::defaultLocalpart();
     $parts = explode($verp_separator, substr(substr($data, 0, strpos($data, '@')), strlen($localpart) + 2));
 
     $verp_items = (count($parts) === 3)
@@ -163,4 +167,5 @@ class CRM_Mailgunny_Page_Webhook extends CRM_Core_Page {
     $bounce_type->find(TRUE);
     return $bounce_type->id;
   }
+
 }
