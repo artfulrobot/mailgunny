@@ -11,34 +11,19 @@ This extension provides this functionality.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
-## Requirements
+### How do I *send* email from CiviCRM using Mailgun?
 
-* PHP v7.0+
-* CiviCRM 5.x (tested with 5.8.1)
+To send email, configure CiviCRM to send email using an SMTP server - https://docs.civicrm.org/sysadmin/en/latest/setup/civimail/outbound/#smtp
 
-## Installation (Web UI)
+A typical configuration might look like:
 
-This extension has not yet been published for installation via the web UI.
+* SMTP server: ssl://smtp.eu.mailgun.org
+* Port: 465
+* Username/Password: *You'll need to create new SMTP credential in your mailgun account*
 
-## Installation (CLI, Zip)
+## Installation
 
-Sysadmins and developers may download the `.zip` file for this extension and
-install it with the command-line tool [cv](https://github.com/civicrm/cv).
-
-```bash
-cd <extension-dir>
-cv dl mailgunny@https://github.com/artfulrobot/mailgunny/archive/master.zip
-```
-
-## Installation (CLI, Git)
-
-Sysadmins and developers may clone the [Git](https://en.wikipedia.org/wiki/Git) repo for this extension and
-install it with the command-line tool [cv](https://github.com/civicrm/cv).
-
-```bash
-git clone https://github.com/artfulrobot/mailgunny.git
-cv en mailgunny
-```
+See: https://docs.civicrm.org/sysadmin/en/latest/customize/extensions/#installing-a-new-extension
 
 ## Usage
 
